@@ -122,22 +122,25 @@
     ];
 
     function updateGreeting() {
-      const hour = new Date().getHours();
-      const g = greetings.find(gr => hour >= gr.start && hour < gr.end);
+  const hour = new Date().getHours();
+  const g = greetings.find(gr => hour >= gr.start && hour < gr.end);
 
-      greetingElement.textContent = g.text;
-      messageElement.textContent = g.message;
-      iconContainer.textContent = g.icon;
-      favicon.href = g.favicon;
-      document.title = g.title;
+  greetingElement.textContent = g.text;
+  messageElement.textContent = g.message;
+  iconContainer.textContent = g.icon;
+  favicon.href = g.favicon;
 
-      // Restart animations when greeting changes
-      [greetingElement, messageElement, iconContainer].forEach(el => {
-        el.style.animation = "none";
-        void el.offsetWidth; // trigger reflow
-        el.style.animation = "";
-      });
-    }
+  // Dynamic title with "Hello Sunshine!"
+  document.title = `Hello Sunshine! ${g.title}`;
+
+  // Restart animations when greeting changes
+  [greetingElement, messageElement, iconContainer].forEach(el => {
+    el.style.animation = "none";
+    void el.offsetWidth; // trigger reflow
+    el.style.animation = "";
+  });
+}
+
 
     updateGreeting();
     setInterval(updateGreeting, 60000);
