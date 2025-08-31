@@ -1,139 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- SEO Meta Tags -->
-    <title>Hello Sunshine</title>
-    <meta name="description" content="Greet your day with Hello Sunshine! A fun, simple web app that shows “Good Morning,” “Good Afternoon,” or “Good Night” based on your local time—brightening your mood anytime.">
-    <meta name="keywords" content="time greeting, dynamic greeting, good morning app, javascript time, dark mode greeting">
-    <meta name="author" content="Gemini">
-    
-    <!-- Favicon will be dynamically set by JavaScript -->
-    <link id="favicon" rel="icon" type="image/svg+xml" href="">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Meta Tags -->
+  <title>Hello Sunshine – Time-Based Greetings</title>
+  <meta name="description" content="Hello Sunshine greets you with a cheerful Good Morning, Good Afternoon, or Good Night based on your local time—brightening your mood anytime.">
+  <meta name="keywords" content="time greeting, dynamic greeting, good morning app, javascript time, dark mode greeting">
+  <meta name="author" content="Gemini">
+  
+  <!-- Favicon dynamically set -->
+  <link id="favicon" rel="icon" type="image/svg+xml" href="">
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Hello Sunshine">
-    <meta property="og:description" content="Greet your day with Hello Sunshine! A fun, simple web app that shows “Good Morning,” “Good Afternoon,” or “Good Night” based on your local time—brightening your mood anytime.">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="Hello Sunshine">
-    <meta property="twitter:description" content="Greet your day with Hello Sunshine! A fun, simple web app that shows “Good Morning,” “Good Afternoon,” or “Good Night” based on your local time—brightening your mood anytime.">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Hello Sunshine – Time-Based Greetings">
+  <meta property="og:description" content="Hello Sunshine greets you with a cheerful Good Morning, Good Afternoon, or Good Night based on your local time.">
+  <meta property="og:image" content="https://example.com/preview.png"> <!-- Replace with real image -->
 
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Hello Sunshine – Time-Based Greetings">
+  <meta name="twitter:description" content="A playful greeting app that adapts to your local time.">
+  <meta name="twitter:image" content="https://example.com/preview.png"> <!-- Replace with real image -->
 
-    <!-- Tailwind CSS for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        /* Applying the Inter font to the body */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Inter', sans-serif; transition: background 1s ease, color 0.5s ease; }
+    .fade { transition: opacity 0.5s ease; }
+  </style>
 </head>
-<body class="bg-gray-900 text-white transition-colors duration-500">
+<body class="bg-gray-900 text-white">
 
-    <!-- Main container to center content vertically and horizontally -->
-    <main class="flex flex-col items-center justify-center min-h-screen p-4">
-        <!-- Icon container will be populated by JavaScript -->
-        <div id="icon-container" class="mb-6 text-yellow-300">
-            <!-- SVG Icon will be inserted here -->
-        </div>
+  <!-- Main container -->
+  <main class="flex flex-col items-center justify-center min-h-screen p-4 text-center">
+    <div id="icon-container" class="mb-6 text-yellow-300 fade" aria-hidden="true"></div>
+    <h1 id="greeting-text" class="text-4xl sm:text-5xl md:text-6xl font-bold fade">Loading...</h1>
+    <p id="message-text" class="mt-4 text-lg text-gray-400 fade">Checking the time...</p>
+  </main>
 
-        <!-- Greeting text that changes based on time -->
-        <h1 id="greeting-text" class="text-4xl sm:text-5xl md:text-6xl font-bold text-center capitalize">
-            Loading...
-        </h1>
-        
-        <!-- A friendly message that also changes based on time -->
-        <p id="message-text" class="mt-4 text-lg text-gray-400 text-center">
-            Checking the time...
-        </p>
-    </main>
+  <script>
+    const greetingElement = document.getElementById('greeting-text');
+    const messageElement = document.getElementById('message-text');
+    const iconContainer = document.getElementById('icon-container');
+    const favicon = document.getElementById('favicon');
 
-    <script>
-        // Immediately-invoked function to avoid polluting the global scope
-        (function() {
-            // Get references to the HTML elements we need to update
-            const greetingElement = document.getElementById('greeting-text');
-            const messageElement = document.getElementById('message-text');
-            const iconContainer = document.getElementById('icon-container');
-            const favicon = document.getElementById('favicon');
+    const sunFavicon = `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FBBF24%22/></svg>`;
+    const moonFavicon = `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><path d=%22M 50 0 A 50 50 0 1 0 50 100 A 40 40 0 1 1 50 0 Z%22 fill=%22%23A5B4FC%22/></svg>`;
 
-            // --- SVG Favicons (as data URIs) ---
-            const sunFavicon = `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FBBF24%22/></svg>`;
-            const moonFavicon = `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><path d=%22M 50 0 A 50 50 0 1 0 50 100 A 40 40 0 1 1 50 0 Z%22 fill=%22%23A5B4FC%22/></svg>`;
+    const sunIcon = `
+      <svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sun icon" class="h-16 w-16 md:h-20 md:w-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <title>Sun</title>
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>`;
+    const moonIcon = `
+      <svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Moon icon" class="h-16 w-16 md:h-20 md:w-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <title>Moon</title>
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>`;
 
-            // --- SVG Icons ---
-            // Sun icon for morning and afternoon
-            const sunIcon = `
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 md:h-20 md:w-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="5"></circle>
-                    <line x1="12" y1="1" x2="12" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="23"></line>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                    <line x1="1" y1="12" x2="3" y2="12"></line>
-                    <line x1="21" y1="12" x2="23" y2="12"></line>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                </svg>
-            `;
+    const greetings = [
+      { start: 5, end: 12, text: "Good Morning", message: "Let's make today a great one!", icon: sunIcon, color: "text-yellow-300", favicon: sunFavicon, title: "Good Morning!", bg: "from-yellow-200 via-yellow-400 to-orange-500" },
+      { start: 12, end: 18, text: "Good Afternoon", message: "Hope you're having a productive day.", icon: sunIcon, color: "text-yellow-300", favicon: sunFavicon, title: "Good Afternoon!", bg: "from-blue-200 via-blue-400 to-indigo-500" },
+      { start: 18, end: 24, text: "Good Night", message: "Time to unwind and get some rest.", icon: moonIcon, color: "text-indigo-300", favicon: moonFavicon, title: "Good Night!", bg: "from-gray-800 via-indigo-900 to-black" },
+      { start: 0, end: 5, text: "Good Night", message: "Time to unwind and get some rest.", icon: moonIcon, color: "text-indigo-300", favicon: moonFavicon, title: "Good Night!", bg: "from-gray-800 via-indigo-900 to-black" }
+    ];
 
-            // Moon icon for the night
-            const moonIcon = `
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 md:h-20 md:w-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                </svg>
-            `;
+    function updateGreeting() {
+      const hour = new Date().getHours();
+      const g = greetings.find(gr => hour >= gr.start && hour < gr.end);
 
-            // Get the current hour (0-23)
-            const currentHour = new Date().getHours();
+      greetingElement.textContent = g.text;
+      messageElement.textContent = g.message;
+      iconContainer.innerHTML = g.icon;
+      iconContainer.className = `mb-6 fade ${g.color}`;
+      favicon.href = g.favicon;
+      document.title = g.title;
+      document.body.className = `bg-gradient-to-br ${g.bg} text-white`;
+    }
 
-            let greeting;
-            let message;
-            let icon;
-
-            // Determine the greeting, message, and icon based on the hour
-            if (currentHour >= 5 && currentHour < 12) {
-                // Morning (5:00 AM to 11:59 AM)
-                greeting = "Good Morning";
-                message = "Let's make today a great one!";
-                icon = sunIcon;
-                document.title = 'Good Morning!';
-                favicon.href = sunFavicon;
-                iconContainer.classList.add('text-yellow-300'); // Sun color
-            } else if (currentHour >= 12 && currentHour < 18) {
-                // Afternoon (12:00 PM to 5:59 PM)
-                greeting = "Good Afternoon";
-                message = "Hope you're having a productive day.";
-                icon = sunIcon;
-                document.title = 'Good Afternoon!';
-                favicon.href = sunFavicon;
-                iconContainer.classList.add('text-yellow-300'); // Sun color
-            } else {
-                // Night (6:00 PM to 4:59 AM)
-                greeting = "Good Night";
-                message = "Time to unwind and get some rest.";
-                icon = moonIcon;
-                document.title = 'Good Night!';
-                favicon.href = moonFavicon;
-                iconContainer.classList.add('text-indigo-300'); // Moon color
-            }
-
-            // Update the HTML content with the determined values
-            greetingElement.textContent = greeting;
-            messageElement.textContent = message;
-            iconContainer.innerHTML = icon;
-        })();
-    </script>
-
+    updateGreeting();
+    setInterval(updateGreeting, 60000); // refresh every minute
+  </script>
 </body>
 </html>
-
-
