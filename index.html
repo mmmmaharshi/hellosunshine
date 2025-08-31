@@ -11,6 +11,19 @@
 
   <link id="favicon" rel="icon" type="image/svg+xml" href="">
 
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Hello Sunshine – Time-Based Greetings">
+  <meta property="og:description"
+    content="Hello Sunshine greets you with a cheerful Good Morning, Good Afternoon, or Good Night based on your local time.">
+  <meta property="og:image" content="https://github.com/mmmmaharshi/hellosunshine/blob/main/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Hello Sunshine – Time-Based Greetings">
+  <meta name="twitter:description" content="A playful greeting app that adapts to your local time.">
+  <meta name="twitter:image" content="https://github.com/mmmmaharshi/hellosunshine/blob/main/og.png">
+
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -53,7 +66,9 @@
     }
 
     @keyframes pulseSlow {
-      0%, 100% {
+
+      0%,
+      100% {
         opacity: 1;
       }
 
@@ -79,14 +94,11 @@
 <body class="flex items-center justify-center min-h-screen text-center px-4">
 
   <main>
-    <div id="icon-container"
-      class="mb-6 text-7xl opacity-0 animate-fadeInUp animate-pulseSlow"
-      aria-hidden="true">⌛</div>
-    <h1 id="greeting-text"
-      class="text-3xl sm:text-5xl font-bold opacity-0 animate-fadeInUp"
+    <div id="icon-container" class="mb-6 text-7xl opacity-0 animate-fadeInUp animate-pulseSlow" aria-hidden="true">⌛
+    </div>
+    <h1 id="greeting-text" class="text-3xl sm:text-5xl font-bold opacity-0 animate-fadeInUp"
       style="animation-delay:0.3s">LOADING</h1>
-    <p id="message-text"
-      class="mt-4 text-sm sm:text-base text-gray-400 opacity-0 animate-fadeIn"
+    <p id="message-text" class="mt-4 text-sm sm:text-base text-gray-400 opacity-0 animate-fadeIn"
       style="animation-delay:0.8s">Checking time...</p>
   </main>
 
