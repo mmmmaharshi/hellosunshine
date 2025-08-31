@@ -5,66 +5,89 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- SEO Meta Tags -->
-  <title>Hello Sunshine – Time-Based Greetings</title>
+  <title>Hello Sunshine – Nothing Style</title>
   <meta name="description"
-    content="Hello Sunshine greets you with a cheerful Good Morning, Good Afternoon, or Good Night based on your local time—brightening your mood anytime.">
-  <meta name="keywords"
-    content="time greeting, dynamic greeting, good morning app, javascript time, dark mode greeting">
-  <meta name="author" content="Gemini">
+    content="Hello Sunshine greets you with a clean Nothing Phone inspired design—Good Morning, Good Afternoon, or Good Night based on your time.">
 
-  <!-- Favicon dynamically set -->
   <link id="favicon" rel="icon" type="image/svg+xml" href="">
 
-  <!-- Theme color for mobile browsers -->
-  <meta id="theme-color" name="theme-color" content="#000000">
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Hello Sunshine – Time-Based Greetings">
-  <meta property="og:description"
-    content="Hello Sunshine greets you with a cheerful Good Morning, Good Afternoon, or Good Night based on your local time.">
-  <meta property="og:image" content="https://example.com/preview.png"> <!-- Replace with real image -->
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Hello Sunshine – Time-Based Greetings">
-  <meta name="twitter:description" content="A playful greeting app that adapts to your local time.">
-  <meta name="twitter:image" content="https://example.com/preview.png"> <!-- Replace with real image -->
-
-  <!-- Tailwind CSS -->
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
   <style>
     body {
-      font-family: 'Inter', sans-serif;
-      transition: background 1s ease, color 0.5s ease;
+      font-family: 'Share Tech Mono', monospace;
+      background-color: #000;
+      color: #fff;
       overflow: hidden;
-      margin: 0;
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
-      padding-left: env(safe-area-inset-left);
-      padding-right: env(safe-area-inset-right);
     }
 
-    .fade {
-      transition: opacity 0.5s ease;
+    h1 {
+      letter-spacing: 0.2em;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes pulseSlow {
+      0%, 100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.6;
+      }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    .animate-fadeIn {
+      animation: fadeIn 1.5s ease forwards;
+    }
+
+    .animate-pulseSlow {
+      animation: pulseSlow 3s ease-in-out infinite;
     }
   </style>
 </head>
 
-<body class="flex items-center justify-center min-h-screen bg-gray-900 text-white">
+<body class="flex items-center justify-center min-h-screen text-center px-4">
 
-  <!-- Main container -->
-  <main class="flex flex-col items-center justify-center w-full h-full p-4 text-center">
-    <div id="icon-container" class="mb-6 fade" aria-hidden="true"></div>
-    <h1 id="greeting-text" class="text-4xl sm:text-5xl md:text-6xl font-bold fade">Loading...</h1>
-    <p id="message-text" class="mt-4 text-lg text-gray-200 fade">Checking the time...</p>
+  <main>
+    <div id="icon-container"
+      class="mb-6 text-7xl opacity-0 animate-fadeInUp animate-pulseSlow"
+      aria-hidden="true">⌛</div>
+    <h1 id="greeting-text"
+      class="text-3xl sm:text-5xl font-bold opacity-0 animate-fadeInUp"
+      style="animation-delay:0.3s">LOADING</h1>
+    <p id="message-text"
+      class="mt-4 text-sm sm:text-base text-gray-400 opacity-0 animate-fadeIn"
+      style="animation-delay:0.8s">Checking time...</p>
   </main>
 
   <script>
@@ -72,57 +95,18 @@
     const messageElement = document.getElementById('message-text');
     const iconContainer = document.getElementById('icon-container');
     const favicon = document.getElementById('favicon');
-    const themeMeta = document.getElementById('theme-color');
 
-    // Generate emoji favicon as SVG Data URI
     function emojiFavicon(emoji) {
       return `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
-        <text y='.9em' font-size='90'>${emoji}</text>
+        <text y='.9em' font-size='80' fill='white'>${emoji}</text>
       </svg>`;
     }
 
-    // Greeting configurations
     const greetings = [
-      {
-        start: 5, end: 12,
-        text: "Good Morning",
-        message: "Let's make today a great one!",
-        icon: `<span role="img" aria-label="Sunrise" class="text-6xl md:text-7xl">🌅</span>`,
-        favicon: emojiFavicon("🌅"),
-        title: "Good Morning!",
-        bg: "from-yellow-100 via-orange-200 to-pink-400",
-        color: "#FDBA74"
-      },
-      {
-        start: 12, end: 18,
-        text: "Good Afternoon",
-        message: "Hope you're having a productive day.",
-        icon: `<span role="img" aria-label="Sun" class="text-6xl md:text-7xl">🌞</span>`,
-        favicon: emojiFavicon("🌞"),
-        title: "Good Afternoon!",
-        bg: "from-blue-200 via-blue-400 to-indigo-500",
-        color: "#60A5FA"
-      },
-      {
-        start: 18, end: 24,
-        text: "Good Night",
-        message: "Time to unwind and get some rest.",
-        icon: `<span role="img" aria-label="Moon" class="text-6xl md:text-7xl">🌙</span>`,
-        favicon: emojiFavicon("🌙"),
-        title: "Good Night!",
-        bg: "from-gray-800 via-indigo-900 to-black",
-        color: "#111827"
-      },
-      {
-        start: 0, end: 5,
-        text: "Good Night",
-        message: "Time to unwind and get some rest.",
-        icon: `<span role="img" aria-label="Moon" class="text-6xl md:text-7xl">🌙</span>`,
-        favicon: emojiFavicon("🌙"),
-        title: "Good Night!",
-        bg: "from-gray-800 via-indigo-900 to-black",
-        color: "#111827"
-      }
+      { start: 5, end: 12, text: "GOOD MORNING", message: "Time to rise and shine.", icon: "🌅", favicon: emojiFavicon("🌅"), title: "Good Morning" },
+      { start: 12, end: 18, text: "GOOD AFTERNOON", message: "Keep going strong.", icon: "🌞", favicon: emojiFavicon("🌞"), title: "Good Afternoon" },
+      { start: 18, end: 24, text: "GOOD NIGHT", message: "Unwind and recharge.", icon: "🌙", favicon: emojiFavicon("🌙"), title: "Good Night" },
+      { start: 0, end: 5, text: "GOOD NIGHT", message: "Unwind and recharge.", icon: "🌙", favicon: emojiFavicon("🌙"), title: "Good Night" }
     ];
 
     function updateGreeting() {
@@ -131,17 +115,19 @@
 
       greetingElement.textContent = g.text;
       messageElement.textContent = g.message;
-      iconContainer.innerHTML = g.icon;
+      iconContainer.textContent = g.icon;
       favicon.href = g.favicon;
       document.title = g.title;
-      document.body.className = `flex items-center justify-center min-h-screen bg-gradient-to-br ${g.bg} text-white`;
-      themeMeta.setAttribute("content", g.color);
+
+      // Restart animations when greeting changes
+      [greetingElement, messageElement, iconContainer].forEach(el => {
+        el.style.animation = "none";
+        void el.offsetWidth; // trigger reflow
+        el.style.animation = "";
+      });
     }
 
-    // Initial load
     updateGreeting();
-
-    // Refresh every minute
     setInterval(updateGreeting, 60000);
   </script>
 
