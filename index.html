@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
+    <title>Hello Sunshine</title>
+    <meta name="description" content="Greet your day with Hello Sunshine! A fun, simple web app that shows “Good Morning,” “Good Afternoon,” or “Good Night” based on your local time—brightening your mood anytime.">
+    <meta name="keywords" content="time greeting, dynamic greeting, good morning app, javascript time, dark mode greeting">
+    <meta name="author" content="Gemini">
+    
+    <!-- Favicon will be dynamically set by JavaScript -->
+    <link id="favicon" rel="icon" type="image/svg+xml" href="">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Hello Sunshine">
+    <meta property="og:description" content="Greet your day with Hello Sunshine! A fun, simple web app that shows “Good Morning,” “Good Afternoon,” or “Good Night” based on your local time—brightening your mood anytime.">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Hello Sunshine">
+    <meta property="twitter:description" content="Greet your day with Hello Sunshine! A fun, simple web app that shows “Good Morning,” “Good Afternoon,” or “Good Night” based on your local time—brightening your mood anytime.">
+
+
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Applying the Inter font to the body */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white transition-colors duration-500">
+
+    <!-- Main container to center content vertically and horizontally -->
+    <main class="flex flex-col items-center justify-center min-h-screen p-4">
+        <!-- Icon container will be populated by JavaScript -->
+        <div id="icon-container" class="mb-6 text-yellow-300">
+            <!-- SVG Icon will be inserted here -->
+        </div>
+
+        <!-- Greeting text that changes based on time -->
+        <h1 id="greeting-text" class="text-4xl sm:text-5xl md:text-6xl font-bold text-center capitalize">
+            Loading...
+        </h1>
+        
+        <!-- A friendly message that also changes based on time -->
+        <p id="message-text" class="mt-4 text-lg text-gray-400 text-center">
+            Checking the time...
+        </p>
+    </main>
+
+    <script>
+        // Immediately-invoked function to avoid polluting the global scope
+        (function() {
+            // Get references to the HTML elements we need to update
+            const greetingElement = document.getElementById('greeting-text');
+            const messageElement = document.getElementById('message-text');
+            const iconContainer = document.getElementById('icon-container');
+            const favicon = document.getElementById('favicon');
+
+            // --- SVG Favicons (as data URIs) ---
+            const sunFavicon = `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FBBF24%22/></svg>`;
+            const moonFavicon = `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><path d=%22M 50 0 A 50 50 0 1 0 50 100 A 40 40 0 1 1 50 0 Z%22 fill=%22%23A5B4FC%22/></svg>`;
+
+            // --- SVG Icons ---
+            // Sun icon for morning and afternoon
+            const sunIcon = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 md:h-20 md:w-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            `;
+
+            // Moon icon for the night
+            const moonIcon = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 md:h-20 md:w-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            `;
+
+            // Get the current hour (0-23)
+            const currentHour = new Date().getHours();
+
+            let greeting;
+            let message;
+            let icon;
+
+            // Determine the greeting, message, and icon based on the hour
+            if (currentHour >= 5 && currentHour < 12) {
+                // Morning (5:00 AM to 11:59 AM)
+                greeting = "Good Morning";
+                message = "Let's make today a great one!";
+                icon = sunIcon;
+                document.title = 'Good Morning!';
+                favicon.href = sunFavicon;
+                iconContainer.classList.add('text-yellow-300'); // Sun color
+            } else if (currentHour >= 12 && currentHour < 18) {
+                // Afternoon (12:00 PM to 5:59 PM)
+                greeting = "Good Afternoon";
+                message = "Hope you're having a productive day.";
+                icon = sunIcon;
+                document.title = 'Good Afternoon!';
+                favicon.href = sunFavicon;
+                iconContainer.classList.add('text-yellow-300'); // Sun color
+            } else {
+                // Night (6:00 PM to 4:59 AM)
+                greeting = "Good Night";
+                message = "Time to unwind and get some rest.";
+                icon = moonIcon;
+                document.title = 'Good Night!';
+                favicon.href = moonFavicon;
+                iconContainer.classList.add('text-indigo-300'); // Moon color
+            }
+
+            // Update the HTML content with the determined values
+            greetingElement.textContent = greeting;
+            messageElement.textContent = message;
+            iconContainer.innerHTML = icon;
+        })();
+    </script>
+
+</body>
+</html>
+
+
