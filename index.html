@@ -16,6 +16,9 @@
   <!-- Favicon dynamically set -->
   <link id="favicon" rel="icon" type="image/svg+xml" href="">
 
+  <!-- Theme color for mobile browsers -->
+  <meta id="theme-color" name="theme-color" content="#000000">
+
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Hello Sunshine – Time-Based Greetings">
@@ -41,6 +44,12 @@
     body {
       font-family: 'Inter', sans-serif;
       transition: background 1s ease, color 0.5s ease;
+      overflow: hidden;
+      margin: 0;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
     }
 
     .fade {
@@ -49,13 +58,13 @@
   </style>
 </head>
 
-<body class="bg-gray-900 text-white">
+<body class="flex items-center justify-center min-h-screen bg-gray-900 text-white">
 
   <!-- Main container -->
-  <main class="flex flex-col items-center justify-center min-h-screen p-4 text-center">
-    <div id="icon-container" class="mb-6 text-yellow-300 fade" aria-hidden="true"></div>
+  <main class="flex flex-col items-center justify-center w-full h-full p-4 text-center">
+    <div id="icon-container" class="mb-6 fade" aria-hidden="true"></div>
     <h1 id="greeting-text" class="text-4xl sm:text-5xl md:text-6xl font-bold fade">Loading...</h1>
-    <p id="message-text" class="mt-4 text-lg text-gray-400 fade">Checking the time...</p>
+    <p id="message-text" class="mt-4 text-lg text-gray-200 fade">Checking the time...</p>
   </main>
 
   <script>
@@ -63,12 +72,13 @@
     const messageElement = document.getElementById('message-text');
     const iconContainer = document.getElementById('icon-container');
     const favicon = document.getElementById('favicon');
+    const themeMeta = document.getElementById('theme-color');
 
     // Generate emoji favicon as SVG Data URI
     function emojiFavicon(emoji) {
       return `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
-      <text y='.9em' font-size='90'>${emoji}</text>
-    </svg>`;
+        <text y='.9em' font-size='90'>${emoji}</text>
+      </svg>`;
     }
 
     // Greeting configurations
@@ -80,7 +90,8 @@
         icon: `<span role="img" aria-label="Sunrise" class="text-6xl md:text-7xl">🌅</span>`,
         favicon: emojiFavicon("🌅"),
         title: "Good Morning!",
-        bg: "from-yellow-100 via-orange-200 to-pink-400"
+        bg: "from-yellow-100 via-orange-200 to-pink-400",
+        color: "#FDBA74"
       },
       {
         start: 12, end: 18,
@@ -89,7 +100,8 @@
         icon: `<span role="img" aria-label="Sun" class="text-6xl md:text-7xl">🌞</span>`,
         favicon: emojiFavicon("🌞"),
         title: "Good Afternoon!",
-        bg: "from-blue-200 via-blue-400 to-indigo-500"
+        bg: "from-blue-200 via-blue-400 to-indigo-500",
+        color: "#60A5FA"
       },
       {
         start: 18, end: 24,
@@ -98,7 +110,8 @@
         icon: `<span role="img" aria-label="Moon" class="text-6xl md:text-7xl">🌙</span>`,
         favicon: emojiFavicon("🌙"),
         title: "Good Night!",
-        bg: "from-gray-800 via-indigo-900 to-black"
+        bg: "from-gray-800 via-indigo-900 to-black",
+        color: "#111827"
       },
       {
         start: 0, end: 5,
@@ -107,7 +120,8 @@
         icon: `<span role="img" aria-label="Moon" class="text-6xl md:text-7xl">🌙</span>`,
         favicon: emojiFavicon("🌙"),
         title: "Good Night!",
-        bg: "from-gray-800 via-indigo-900 to-black"
+        bg: "from-gray-800 via-indigo-900 to-black",
+        color: "#111827"
       }
     ];
 
@@ -120,7 +134,8 @@
       iconContainer.innerHTML = g.icon;
       favicon.href = g.favicon;
       document.title = g.title;
-      document.body.className = `bg-gradient-to-br ${g.bg} text-white`;
+      document.body.className = `flex items-center justify-center min-h-screen bg-gradient-to-br ${g.bg} text-white`;
+      themeMeta.setAttribute("content", g.color);
     }
 
     // Initial load
